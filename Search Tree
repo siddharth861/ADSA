@@ -1,0 +1,109 @@
+import java.util.Scanner;
+
+// Node class for BST
+class Node {
+    int data;
+    Node left, right;
+
+    public Node(int item) {
+        data = item;
+        left = right = null;
+    }
+}
+
+// BST class
+class BinarySearchTree {
+    Node root;
+
+    // Insert node into BST
+    public Node insert(Node root, int data) {
+        if (root == null) {
+            root = new Node(data);
+            return root;
+        }
+
+        if (data < root.data)
+            root.left = insert(root.left, data);
+        else if (data > root.data)
+            root.right = insert(root.right, data);
+
+        return root;
+    }
+
+    // In-order traversal (LNR)
+    public void inorder(Node root) {
+        if (root != null) {
+            inorder(root.left);
+            System.out.print(root.data + " ");
+            inorder(root.right);
+        }
+    }
+
+    // Pre-order traversal (NLR)
+    public void preorder(Node root) {
+        if (root != null) {
+            System.out.print(root.data + " ");
+            preorder(root.left);
+            preorder(root.right);
+        }
+    }
+
+    // Post-order traversal (LRN)
+    public void postorder(Node root) {
+        if (root != null) {
+            postorder(root.left);
+            postorder(root.right);
+            System.out.print(root.data + " ");
+        }
+    }
+
+    // Search for a node
+    public boolean search(Node root, int key) {
+        if (root == null)
+            return false;
+        if (key == root.data)
+            return true;
+        else if (key < root.data)
+            return search(root.left, key);
+        else
+            return search(root.right, key);
+    }
+}
+
+// Main class
+public class BSTDemo {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        BinarySearchTree bst = new BinarySearchTree();
+        Node root = null;
+
+        System.out.print("Enter number of nodes to insert: ");
+        int n = sc.nextInt();
+
+        System.out.println("Enter " + n + " node values:");
+        for (int i = 0; i < n; i++) {
+            int val = sc.nextInt();
+            root = bst.insert(root, val);
+        }
+
+        System.out.println("\nIn-order Traversal:");
+        bst.inorder(root);
+
+        System.out.println("\nPre-order Traversal:");
+        bst.preorder(root);
+
+        System.out.println("\nPost-order Traversal:");
+        bst.postorder(root);
+
+        System.out.print("\n\nEnter value to search: ");
+        int key = sc.nextInt();
+
+        boolean found = bst.search(root, key);
+        if (found)
+            System.out.println(key + " is found in the BST.");
+        else
+            System.out.println(key + " is NOT found in the BST.");
+
+        sc.close();
+    }
+}
