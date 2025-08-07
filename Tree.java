@@ -1,70 +1,114 @@
+import java.util.Scanner;
 
-
-class BinaryTree {
-
-
-    static class Node {
+public class BinarySearchTree {
+    class Node {
         int data;
         Node left, right;
 
-        public Node(int item) {
-            data = item;
+        public Node(int data) {
+            this.data = data;
             left = right = null;
         }
     }
 
-
     Node root;
 
-
-    BinaryTree() {
+    public BinarySearchTree() {
         root = null;
     }
 
-
-    void preOrder(Node node) {
-        if (node == null)
-            return;
-        System.out.print(node.data + " ");
-        preOrder(node.left);
-        preOrder(node.right);
+    public void insert(int data) {
+        root = insertRec(root, data);
     }
 
+    private Node insertRec(Node root, int data) {
+        if (root == null) {
+            root = new Node(data);
+            return root;
+        }
 
-    void inOrder(Node node) {
-        if (node == null)
-            return;
-        inOrder(node.left);
-        System.out.print(node.data + " ");
-        inOrder(node.right);
+        if (data < root.data) {
+            root.left = insertRec(root.left, data);
+        } else if (data > root.data) {
+            root.right = insertRec(root.right, data);
+        }
+
+        return root;
     }
 
-
-    void postOrder(Node node) {
-        if (node == null)
-            return;
-        postOrder(node.left);
-        postOrder(node.right);
-        System.out.print(node.data + " ");
+    public void inOrder() {
+        System.out.print("In-order traversal: ");
+        inOrderRec(root);
+        System.out.println();
     }
 
+    private void inOrderRec(Node root) {
+        if (root != null) {
+            inOrderRec(root.left);
+            System.out.print(root.data + " ");
+            inOrderRec(root.right);
+        }
+    }
+
+    public void preOrder() {
+        System.out.print("Pre-order traversal: ");
+        preOrderRec(root);
+        System.out.println();
+    }
+
+    private void preOrderRec(Node root) {
+        if (root != null) {
+            System.out.print(root.data + " ");
+            preOrderRec(root.left);
+            preOrderRec(root.right);
+        }
+    }
+
+    public void postOrder() {
+        System.out.print("Post-order traversal: ");
+        postOrderRec(root);
+        System.out.println();
+    }
+
+    private void postOrderRec(Node root) {
+        if (root != null) {
+            postOrderRec(root.left);
+            postOrderRec(root.right);
+            System.out.print(root.data + " ");
+        }
+    }
 
     public static void main(String[] args) {
-        BinaryTree tree = new BinaryTree();
+        BinarySearchTree bst = new BinarySearchTree();
+        Scanner scanner = new Scanner(System.in);
 
+        System.out.print("Enter the number of nodes to insert: ");
+        int numNodes = scanner.nextInt();
 
-        tree.root = new Node(1);
-        tree.root.left = new Node(2);
-        tree.root.right = new Node(3);
+        if (numNodes <= 0) {
+            System.out.println("Please enter a positive number of nodes.");
+            scanner.close();
+            return;
+        }
 
+        System.out.println("Enter " + numNodes + " integer values for the BST:");
+        for (int i = 0; i < numNodes; i++) {
+            System.out.print("Enter value " + (i + 1) + ": ");
+            int value;
+            try {
+                value = scanner.nextInt();
+                bst.insert(value);
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next();
+                i--;
+            }
+        }
 
-        System.out.println("Preorder traversal:");
-        tree.preOrder(tree.root);  // Output: 1 2 4 5 3 6
+        bst.inOrder();
+        bst.preOrder();
+        bst.postOrder();
 
-        System.out.println("\nInorder traversal:");
-        tree.inOrder(tree.root);   // Output: 4 2 5 1 3 6
-
-        System.out.println("\nPostorder traversal:");
-        tree.postOrder(tree.root); // Output: 4 5 2 6 3 1
+        scanner.close();
     }
-}
+}   
