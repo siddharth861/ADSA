@@ -60,4 +60,5 @@ public class Mergesort {
         sc.close();
     }
 }
-            k+=1 
+            
+
